@@ -21,4 +21,8 @@ class Node
   float y = 1 / (1 + pow((float)Math.E, -4.9*x));
    return y;
   }
+  
+  void bias(float b){
+  bias = b;
+}
 }

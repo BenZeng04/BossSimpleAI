@@ -1,3 +1,7 @@
 class Minion{
-  int HP, x = 1, y = 1;
+  int HP = 1000, x = 800, y = 500;
+  void drawMinion(){
+  }
+  void minionAI(int x, int y){
+  }
 }

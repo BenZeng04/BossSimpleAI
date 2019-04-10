@@ -1,7 +1,12 @@
 class Boss
 {
-  int x = 1, y = 1, HP;
+  float x = 200, y = 200;
+  int HP = 3000;
   ArrayList<Bullet> shots = new ArrayList<Bullet>();
   Minion minion = new Minion();
   
+  
+  void drawBoss(){
+    
+  }
 }
