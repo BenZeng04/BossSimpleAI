@@ -1,16 +1,19 @@
 import java.util.*;
 void setup(){
   size(1600, 1000);
-  player.genes.setupNodes();
-  
+  pop.init();
 }
+Population pop = new Population();
 
-Player player = new Player();
 void draw()
 {
+  frameRate(10000);
   background(0);
-  player.action(player.computeGeneLikelyhood());
-  player.drawPlayer();
-  player.visualization();
+  pop.commit();
+  
 
+}
+void keyPressed()
+{
+  
 }

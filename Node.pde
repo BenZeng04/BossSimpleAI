@@ -25,4 +25,20 @@ class Node
   void bias(float b){
   bias = b;
 }
+  void mutateBias() {
+    float rand2 = random(1);
+    if (rand2 < 0.1) {//10% of the time completely change the weight
+      bias = random(5, -5);
+    } else {//otherwise slightly change it
+      bias += randomGaussian()/10;
+      //keep weight between bounds
+      if(bias > 1){
+        bias = 1;
+      }
+      if(bias < -1){
+        bias = -1;        
+        
+      }
+    }
+  }
 }

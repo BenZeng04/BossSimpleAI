@@ -13,7 +13,6 @@ class PlayerBullet
   {
     if(dist(x, y, b.x, b.y) < 70)
     {
-      alive = false;
       return true;
       
     }

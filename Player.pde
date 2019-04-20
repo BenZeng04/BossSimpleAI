@@ -1,5 +1,5 @@
 class Player {
-int HP = 1000;
+int HP = 2;
 float x = 1400;
 float y = 800;
 float fitness;
@@ -38,65 +38,22 @@ if(type == 3){
 if(type == 4){
   y -= 10;
 }
-if(type == 5){
   if(weaponCooldown < 0){
   bullet.x = x;
   bullet.y = y;
-  bullet.direction = 1;
   bullet.alive = true;
-  weaponCooldown = 100;
+  weaponCooldown = 50;
   }
   
-}
-if(type == 6){
-  if(weaponCooldown < 0){
-  bullet.x = x;
-  bullet.y = y;
-  bullet.direction = 2;
-  bullet.alive = true;
-  weaponCooldown = 100;
-  }
-  
-}
-if(type == 7){
-  if(weaponCooldown < 0){
-  bullet.x = x;
-  bullet.y = y;
-  bullet.direction = 3;
-  bullet.alive = true;
-  weaponCooldown = 100;
-  }
-  
-}
-if(type == 8){
-  if(weaponCooldown < 0){
-  bullet.x = x;
-  bullet.y = y;
-  bullet.direction = 4;
-  bullet.alive = true;
-  weaponCooldown = 100;
-  }
-  
-}
+
 }
 
 int computeGeneLikelyhood(){
    int choice = 0;
-   float smallestDist = 1000000;
    float largestNode = -2;
-   float bulletx = 0, bullety = 0;
    
-   for(Bullet b : boss.shots){
-     if(dist(x, y, b.x, b.y) < smallestDist)
-     {
-       smallestDist = dist(x, y, b.x, b.y);
-       bulletx = b.x;
-       bullety = b.y;
-     }
-   }
-   
-   genes.setGenes(x, y, boss.x, boss.y, bulletx, bullety, boss.minion.x, boss.minion.y, weaponCooldown);
-   for(int i = 0; i < 8; i++){
+   genes.setGenes(x, y, boss.x, boss.y, weaponCooldown);
+   for(int i = 0; i < 4; i++){
      if(genes.outputNodes[i].value > largestNode){
        largestNode = genes.outputNodes[i].value;
        choice = i + 1;
@@ -107,33 +64,37 @@ int computeGeneLikelyhood(){
 
 
 void drawPlayer(){
-  fill(255,0,0);
+  HP = boss.attackPlayer(x, y, HP);
+  textAlign(CENTER);
+  fill(255,0,0,100);
+  noStroke();
   ellipse(x, y, 50, 50); // Player
-  fill(0,255,0);
-
-  if(bullet.hitBoss(boss)){
-    boss.HP -= 30;
-  }
+  fill(0,255,0,50);
   fill(255);
+  textSize(18);
+  text(HP, x, y);
+  fill(255);
+  text(boss.HP, boss.x, boss.y);
+  stroke(255, 80);
+  strokeWeight(2);
+  line(x, y, boss.x, boss.y);
+  
+  noStroke();
+  boss.drawBoss();
+  
+  if(bullet.alive && bullet.hitBoss(boss)){
+    boss.HP -= 30;
+    bullet.alive = false;
+  }
+  fill(255,100);
   if(bullet.alive && !bullet.hitWall()){
   
-    switch(bullet.direction)
-    {
-      case 1:
-        bullet.x+=20;
-        break;
-      case 2:
-        bullet.x-=20;
-        break;
-      case 3:
-        bullet.y+=20;
-        break;
-      case 4:
-        bullet.y-=20;
-        break;
+  if(dist(boss.x, boss.y, bullet.x, bullet.y) > 20){
+    bullet.x += 20 * (boss.x - bullet.x) / dist(boss.x, boss.y, bullet.x, bullet.y);
+    bullet.y += 20 * (boss.y - bullet.y) / dist(boss.x, boss.y, bullet.x, bullet.y);
     }
 
-  
+    fill(255);
     ellipse(bullet.x, bullet.y, 10, 10); //<>//
   }
   
@@ -143,17 +104,14 @@ void visualization(){
   println();
   println();
   println();
-  for(int i = 0; i < 9; i++){
-    print(genes.inputNodes[i].value+" ");
-  }
-  for(int i = 0; i < 16; i++){
-    print(genes.layer1[i].value+" ");
-  }
-  for(int i = 0; i < 16; i++){
-    print(genes.layer2[i].value+" ");
+  for(int i = 0; i < 5; i++){
+    print(genes.inputNodes[i].bias+" ");
   }
   for(int i = 0; i < 8; i++){
-    print(genes.outputNodes[i].value+" ");
+    print(genes.layer1[i].bias+" ");
+  }
+  for(int i = 0; i < 4; i++){
+    print(genes.outputNodes[i].bias+" ");
   }
 }
 
